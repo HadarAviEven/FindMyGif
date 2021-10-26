@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Find My Gif</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search...</string>
+
+    <string name="api_key">Zz7XnA0RZzJJetQAQv1e2c7ErivA9F5u</string>
+    <string name="trending_limit">50</string>
+    <string name="search_limit">3</string>
+    <string name="trending_offset">0</string>
+    <string name="search_offset">0</string>
+    <string name="lang">en</string>
+    <string name="no_data_available">No Gifs Were Found.</string>
+</resources>
