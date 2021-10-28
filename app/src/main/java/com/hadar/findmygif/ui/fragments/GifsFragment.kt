@@ -11,10 +11,12 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hadar.findmygif.R
 import com.hadar.findmygif.ui.adapters.GifAdapter
+import com.hadar.findmygif.ui.models.Gif
 import com.hadar.findmygif.ui.viewmodels.GifsViewModel
 
 class GifsFragment : Fragment() {
@@ -67,12 +69,26 @@ class GifsFragment : Fragment() {
     }
 
     private fun observe() {
-        gifsViewModel?.gifModelListLiveData?.observe(requireActivity(), Observer { gifsList ->
-            gifAdapter.setData(gifsList)
+        gifsViewModel?.gifModelListLiveData?.observe(viewLifecycleOwner, Observer { gifsList ->
+            if (gifsList != null) {
+                gifAdapter.setData(gifsList)
+            }
 
             setRecyclerViewVisibility()
         })
+
+        gifsViewModel?.expandGifLiveEvent?.observe(viewLifecycleOwner, { gifUrlTitlePair ->
+            if (gifUrlTitlePair?.first != null && gifUrlTitlePair.second != null) {
+                val action =
+                    GifsFragmentDirections.actionGifsFragmentToFullScreenGifFragment(
+                        gifUrlTitlePair.first!!,
+                        gifUrlTitlePair.second!!
+                    )
+                view?.findNavController()?.navigate(action)
+            }
+        })
     }
+
 
     private fun initRecyclerView() {
         recyclerView = requireView().findViewById(R.id.recycler_view)
@@ -84,6 +100,12 @@ class GifsFragment : Fragment() {
         } else {
             recyclerView.layoutManager = GridLayoutManager(this.context, 4)
         }
+
+        gifAdapter.setOnItemClickListener(object : GifAdapter.ClickListener {
+            override fun onItemClick(gif: Gif?) {
+                gifsViewModel?.onGifItemClicked(gif)
+            }
+        })
     }
 
     private fun setRecyclerViewVisibility() {
@@ -96,15 +118,4 @@ class GifsFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        gifsViewModel?.onStart()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        gifsViewModel?.onPause()
-    }
 }

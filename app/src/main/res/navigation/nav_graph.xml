@@ -4,9 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/gifs_fragment">
+
+
     <fragment
         android:id="@+id/gifs_fragment"
         android:name="com.hadar.findmygif.ui.fragments.GifsFragment"
         android:label="blank"
-        tools:layout="@layout/fragment_gifs" />
+        tools:layout="@layout/fragment_gifs">
+
+        <action
+            android:id="@+id/action_gifs_fragment_to_full_screen_gif_fragment"
+            app:destination="@id/full_screen_gif_fragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/full_screen_gif_fragment"
+        android:name="com.hadar.findmygif.ui.fragments.FullScreenGifFragment"
+        android:label="blank"
+        tools:layout="@layout/fragment_full_screen_gif">
+        <argument
+            android:name="gif_url"
+            app:argType="string" />
+        <argument
+            android:name="gif_title"
+            app:argType="string" />
+    </fragment>
+
+
 </navigation>
